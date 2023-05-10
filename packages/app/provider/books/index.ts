@@ -1,8 +1,6 @@
 import React, { createContext, useContext } from 'react'
 
-
-
-type BooksContextValue = { list:  }
+type BooksContextValue = {}
 
 const BooksContext = createContext<BooksContextValue>({} as BooksContextValue)
 
