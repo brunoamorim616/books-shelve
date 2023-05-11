@@ -1,4 +1,4 @@
-export type NYTimesFullOverviewResponse = {
+export type NYTimesBooksFullOverviewResponse = {
   status: string
   copyright: string
   num_results: number
@@ -10,6 +10,12 @@ export type NYTimesFullOverviewResponse = {
     next_published_date: string
     lists: BestSellersList[]
   }
+}
+
+export type NYTimesBooksFullOverview = NYTimesBooksFullOverviewResponse
+
+export type NYTimesBooksFullOverviewParams = {
+  published_date?: string
 }
 
 export type BestSellersList = {
