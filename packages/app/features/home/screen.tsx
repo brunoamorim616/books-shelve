@@ -1,37 +1,48 @@
-import {
-  Anchor,
-  Button,
-  H1,
-  Paragraph,
-  Separator,
-  Sheet,
-  XStack,
-  YStack,
-  useToastController,
-} from '@my/ui'
-import { ChevronDown, ChevronUp } from '@tamagui/lucide-icons'
+import { H1, YStack, ScrollView, H2, Stack, Section } from '@my/ui'
+
+import { BooksDisplayComponent } from 'app/components'
+
 import { useBooksAPI } from 'app/provider/books'
-import React, { useState } from 'react'
-import { useLink } from 'solito/link'
+import { Book } from 'app/provider/books/types'
+import React from 'react'
+import { SafeAreaView } from 'react-native'
 
 export function HomeScreen() {
-  const linkProps = useLink({
-    href: '/user/nate',
-  })
-
-  const { listBooksBestSellersFullOverview, bestSellersFullOverviewList } = useBooksAPI()
+  const { bestSellersFullOverviewList } = useBooksAPI()
 
   return (
-    <YStack f={1} jc="center" ai="center" p="$4" space>
-      <H1
-        onPress={() => {
-          listBooksBestSellersFullOverview()
-          console.log('hello')
-        }}
-      >
-        {console.log(bestSellersFullOverviewList)}
-        Hello, world!
-      </H1>
-    </YStack>
+    <SafeAreaView style={{ flex: 1 }}>
+      <YStack f={1} p="$4">
+        <ScrollView gap="$2" showsVerticalScrollIndicator={false}>
+          <H1>Book Shelves</H1>
+          <YStack gap="$5">
+            <Stack gap="$2">
+              <H2>Best Sellers</H2>
+              <BooksDisplayComponent
+                booksList={bestSellersFullOverviewList?.results?.lists[0]?.books}
+              />
+            </Stack>
+            <Stack gap="$2">
+              <H2>Best Sellers</H2>
+              <BooksDisplayComponent
+                booksList={bestSellersFullOverviewList?.results?.lists[1]?.books}
+              />
+            </Stack>
+            <Stack gap="$2">
+              <H2>Best Sellers</H2>
+              <BooksDisplayComponent
+                booksList={bestSellersFullOverviewList?.results?.lists[2]?.books}
+              />
+            </Stack>
+            <Stack gap="$2">
+              <H2>Best Sellers</H2>
+              <BooksDisplayComponent
+                booksList={bestSellersFullOverviewList?.results?.lists[3]?.books}
+              />
+            </Stack>
+          </YStack>
+        </ScrollView>
+      </YStack>
+    </SafeAreaView>
   )
 }

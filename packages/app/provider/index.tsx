@@ -5,6 +5,7 @@ import { ToastViewport } from './tamagui/ToastViewport'
 import config from '../tamagui.config'
 import { useMemo } from 'react'
 import { BooksProvider } from './books'
+import { SafeAreaProvider } from 'react-native-safe-area-context'
 
 export function Provider({ children, ...rest }: Omit<TamaguiProviderProps, 'config'>) {
   const scheme = useColorScheme()
@@ -19,7 +20,9 @@ export function Provider({ children, ...rest }: Omit<TamaguiProviderProps, 'conf
           'mobile',
         ]}
       >
-        <BooksProvider>{children}</BooksProvider>
+        <SafeAreaProvider>
+          <BooksProvider>{children}</BooksProvider>
+        </SafeAreaProvider>
         <CustomToast />
         <ToastViewport />
       </ToastProvider>
