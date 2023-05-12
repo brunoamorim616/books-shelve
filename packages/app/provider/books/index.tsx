@@ -1,5 +1,5 @@
 import { nytimesApi } from 'app/api'
-import React, { ReactElement, createContext, useEffect, useState } from 'react'
+import React, { ReactElement, createContext, useEffect, useRef, useState } from 'react'
 import {
   BooksContextValue,
   BooksProviderProps,
@@ -12,34 +12,44 @@ import { useToast } from 'app/hooks/useToast'
 
 const BooksContext = createContext<BooksContextValue>({} as BooksContextValue)
 
-nytimesApi.addMonitor((monitor) => {
-  const { problem } = monitor
-  console.log(problem)
-})
-
 export function BooksProvider(props: BooksProviderProps): ReactElement<BooksContextValue> {
-  const [bestSellersFullOverviewList, setBestSellersFullOverviewList] =
-    useState<NYTimesBooksFullOverview>({} as NYTimesBooksFullOverview)
+  const bestSellersFullOverviewListRef = useRef<NYTimesBooksFullOverview>(
+    {} as NYTimesBooksFullOverview
+  )
+
+  const [isLoading, setIsLoading] = useState<boolean>(false)
+
   const { errorToast } = useToast()
 
   const { children } = props
 
-  async function listBooksBestSellersFullOverview(params?: NYTimesBooksFullOverviewParams) {
-    const response = await nytimesApi.get<NYTimesBooksFullOverviewResponse | null>(
-      'lists/full-overview.json',
-      params
-    )
-    if (response.problem) {
-      return errorToast(response.problem)
+  const bestSellersFullOverviewList = bestSellersFullOverviewListRef.current
+
+  function setBestSellersFullOverviewListRef(value: NYTimesBooksFullOverview) {
+    if (!value) return
+    bestSellersFullOverviewListRef.current = value
+  }
+
+  async function getListBooksBestSellersFullOverview(params?: NYTimesBooksFullOverviewParams) {
+    try {
+      setIsLoading(true)
+      const response = await nytimesApi.get<NYTimesBooksFullOverviewResponse | null>(
+        'lists/full-overview.json',
+        params
+      )
+      return setBestSellersFullOverviewListRef(response.data as NYTimesBooksFullOverview)
+    } catch (error) {
+      console.log(error)
+    } finally {
+      setIsLoading(false)
     }
-    return setBestSellersFullOverviewList(response.data as NYTimesBooksFullOverview)
   }
 
   useEffect(() => {
     let subscribe = true
 
     if (subscribe) {
-      listBooksBestSellersFullOverview()
+      getListBooksBestSellersFullOverview()
     }
 
     return () => {
@@ -49,7 +59,7 @@ export function BooksProvider(props: BooksProviderProps): ReactElement<BooksCont
 
   return (
     <BooksContext.Provider
-      value={{ bestSellersFullOverviewList, listBooksBestSellersFullOverview }}
+      value={{ bestSellersFullOverviewList, getListBooksBestSellersFullOverview, isLoading }}
     >
       {children}
     </BooksContext.Provider>

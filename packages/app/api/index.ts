@@ -7,3 +7,9 @@ export const nytimesApi = create({
   headers: { 'Content-Type': 'application/json' },
   params: { 'api-key': secrets.nytimes_api_key },
 })
+
+nytimesApi.addMonitor(({ problem, originalError, status }) => {
+  if (problem || originalError || status) {
+    console.log(status, problem, originalError?.message)
+  }
+})

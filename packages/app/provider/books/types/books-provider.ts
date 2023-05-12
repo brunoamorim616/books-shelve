@@ -1,9 +1,13 @@
 import { ReactNode } from 'react'
-import { NYTimesBooksFullOverview } from './bestsellers-full-overview'
+import {
+  NYTimesBooksFullOverview,
+  NYTimesBooksFullOverviewParams,
+} from './bestsellers-full-overview'
 
 export type BooksContextValue = {
   bestSellersFullOverviewList: NYTimesBooksFullOverview
-  listBooksBestSellersFullOverview: any
+  isLoading: boolean
+  getListBooksBestSellersFullOverview: (params?: NYTimesBooksFullOverviewParams) => Promise<void>
 }
 
 export type BooksProviderProps = {

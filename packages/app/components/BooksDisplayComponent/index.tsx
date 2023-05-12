@@ -1,26 +1,26 @@
 import { ScrollView, View } from 'react-native'
 import React, { useMemo } from 'react'
-import { Book } from 'app/provider/books/types'
-import { Stack } from '@my/ui'
+import { BestSellersList, Book, NYTimesBooksFullOverview } from 'app/provider/books/types'
+import { H2, H3, H4, Stack } from '@my/ui'
 import { BooksCoverComponent } from '../BookCoverComponent'
 
 type BooksDisplayComponentProps = {
-  booksList: Book[]
+  booksList: BestSellersList
 }
 
 export function BooksDisplayComponent(props: BooksDisplayComponentProps) {
   const { booksList } = props
 
+  const list = booksList?.books
+  const listName = booksList?.display_name
+
   const renderBooks = useMemo(() => {
-    if (!booksList) return
-    //
-    return booksList.map((book, index) => {
+    console.log(list)
+    if (!list) return
+
+    return list.map((book, index) => {
       return (
-        <Stack
-          key={book?.primary_isbn10}
-          space="$-1"
-          mr={index === booksList.length - 1 ? 0 : '$3'}
-        >
+        <Stack key={book?.primary_isbn10} space="$-1" mr={index === list.length - 1 ? 0 : '$3'}>
           <BooksCoverComponent source={{ uri: book?.book_image }} />
         </Stack>
       )
@@ -28,8 +28,11 @@ export function BooksDisplayComponent(props: BooksDisplayComponentProps) {
   }, [booksList])
 
   return (
-    <ScrollView horizontal pagingEnabled showsHorizontalScrollIndicator={false}>
-      {renderBooks}
-    </ScrollView>
+    <>
+      <H4>{listName}</H4>
+      <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+        {renderBooks}
+      </ScrollView>
+    </>
   )
 }
