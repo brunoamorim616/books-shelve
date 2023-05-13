@@ -1,3 +1,5 @@
+import 'react-native-reanimated'
+import 'react-native-gesture-handler'
 import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native'
 import { Provider } from 'app/provider'
 import { useFonts } from 'expo-font'
