@@ -1,38 +1,40 @@
-import { H1, YStack, ScrollView, H2, Stack, Section, Separator } from '@my/ui'
-
-import { BooksDisplayComponent } from 'app/components'
-
-import { useBooksAPI } from 'app/provider/books'
-import { Book } from 'app/provider/books/types'
 import React from 'react'
+import { YStack, ScrollView, H2, Stack } from '@my/ui'
+import { observer } from 'mobx-react-lite'
+import { BooksDisplayComponent } from 'app/components'
+import { homeStore, booksStore } from 'app/store'
 import { ActivityIndicator, SafeAreaView } from 'react-native'
+import { BestSellersList } from 'app/models'
 
-export function HomeScreen() {
-  const { bestSellersFullOverviewList, isLoading } = useBooksAPI()
+export const HomeScreen = observer(() => {
+  const { fetchBestSellers, getRequestStatus } = homeStore
+  const { getBestSellers } = booksStore
+
+  async function onMount() {
+    await fetchBestSellers()
+  }
 
   return (
-    <SafeAreaView style={{ flex: 1 }}>
+    <SafeAreaView style={{ flex: 1 }} onLayout={onMount}>
       <YStack f={1} p="$4">
         <ScrollView gap="$10" showsVerticalScrollIndicator={false}>
           <H2 mb="$4">Book Shelves</H2>
           <YStack gap="$4">
             <Stack gap="$2">
-              {isLoading ? (
+              {getRequestStatus() === 'pending' ? (
                 <ActivityIndicator />
               ) : (
-                <BooksDisplayComponent booksList={bestSellersFullOverviewList?.results?.lists[0]} />
+                <BooksDisplayComponent booksList={getBestSellers().lists[0] as BestSellersList} />
               )}
             </Stack>
-            <Stack gap="$2">
-              {isLoading ? (
-                <ActivityIndicator />
-              ) : (
-                <BooksDisplayComponent booksList={bestSellersFullOverviewList?.results?.lists[1]} />
-              )}
-            </Stack>
+            {getRequestStatus() === 'pending' ? (
+              <ActivityIndicator />
+            ) : (
+              <BooksDisplayComponent booksList={getBestSellers().lists[1] as BestSellersList} />
+            )}
           </YStack>
         </ScrollView>
       </YStack>
     </SafeAreaView>
   )
-}
+})

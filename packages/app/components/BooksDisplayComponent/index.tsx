@@ -1,7 +1,7 @@
 import { ScrollView, View } from 'react-native'
 import React, { useMemo } from 'react'
 import { BestSellersList, Book, NYTimesBooksFullOverview } from 'app/provider/books/types'
-import { H2, H3, H4, Stack } from '@my/ui'
+import { H2, H3, H4, Stack, YStack } from '@my/ui'
 import { BooksCoverComponent } from '../BookCoverComponent'
 
 type BooksDisplayComponentProps = {
@@ -28,11 +28,11 @@ export function BooksDisplayComponent(props: BooksDisplayComponentProps) {
   }, [booksList])
 
   return (
-    <>
+    <YStack>
       <H4>{listName}</H4>
       <ScrollView horizontal showsHorizontalScrollIndicator={false}>
         {renderBooks}
       </ScrollView>
-    </>
+    </YStack>
   )
 }
