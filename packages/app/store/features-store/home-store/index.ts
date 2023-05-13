@@ -1,6 +1,6 @@
 import { getListBooksBestSellersFullOverview } from 'app/services'
 import { makeAutoObservable, runInAction } from 'mobx'
-import { booksStore } from 'app/store'
+import { booksStore } from 'app/store/domain-store'
 import { RequestStatus, HomeStoreModel } from 'app/models'
 
 const initializer: HomeStoreModel = {
