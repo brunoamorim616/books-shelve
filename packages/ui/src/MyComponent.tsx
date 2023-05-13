@@ -1,14 +1,7 @@
-import { styled, YStack } from 'tamagui'
+import { styled, Stack } from 'tamagui'
 
-export const MyComponent = styled(YStack, {
-  name: 'MyComponent',
-  backgroundColor: 'red',
-
-  variants: {
-    blue: {
-      true: {
-        backgroundColor: 'blue',
-      },
-    },
-  } as const,
+export const Skeleton = styled(Stack, {
+  animation: {
+    name: 'quick',
+  },
 })

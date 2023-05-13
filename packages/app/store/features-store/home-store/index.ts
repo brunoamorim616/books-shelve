@@ -1,7 +1,7 @@
 import { getListBooksBestSellersFullOverview } from 'app/services'
 import { makeAutoObservable, runInAction } from 'mobx'
 import { booksStore } from 'app/store/domain-store'
-import { RequestStatus, HomeStoreModel } from 'app/models'
+import { RequestStatus, HomeStoreModel, BestSellers } from 'app/models'
 
 const initializer: HomeStoreModel = {
   requestStatus: 'pending',
@@ -24,7 +24,7 @@ async function fetchBestSellers(): Promise<void> {
   try {
     const data = await getListBooksBestSellersFullOverview()
     runInAction(() => {
-      booksStore.setBestSellers(data?.results)
+      booksStore.setBestSellers(data?.results as BestSellers)
       store.setRequestStatus('success')
     })
   } catch (error) {

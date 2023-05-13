@@ -1,8 +1,8 @@
 import { ScrollView, View } from 'react-native'
 import React, { useMemo } from 'react'
-import { BestSellersList, Book, NYTimesBooksFullOverview } from 'app/provider/books/types'
-import { H2, H3, H4, Stack, YStack } from '@my/ui'
+import { H1, H4, Stack, YStack } from '@my/ui'
 import { BooksCoverComponent } from '../BookCoverComponent'
+import { BestSellersList } from 'app/models'
 
 type BooksDisplayComponentProps = {
   booksList: BestSellersList
@@ -15,17 +15,16 @@ export function BooksDisplayComponent(props: BooksDisplayComponentProps) {
   const listName = booksList?.display_name
 
   const renderBooks = useMemo(() => {
-    console.log(list)
     if (!list) return
 
     return list.map((book, index) => {
       return (
-        <Stack key={book?.primary_isbn10} space="$-1" mr={index === list.length - 1 ? 0 : '$3'}>
+        <Stack key={book?.primary_isbn13} space="$-1" mr={index === list.length - 1 ? 0 : '$3'}>
           <BooksCoverComponent source={{ uri: book?.book_image }} />
         </Stack>
       )
     })
-  }, [booksList])
+  }, [list])
 
   return (
     <YStack>

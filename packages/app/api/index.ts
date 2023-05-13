@@ -8,8 +8,7 @@ export const nytimesApi = create({
   params: { 'api-key': secrets.nytimes_api_key },
 })
 
-nytimesApi.addMonitor(({ problem, originalError, status }) => {
-  if (problem || originalError || status) {
-    console.log(status, problem, originalError?.message)
-  }
+nytimesApi.addResponseTransform((response) => {
+  if (response?.status && response?.status > 299) throw new Error(response?.problem)
+  else return response
 })
